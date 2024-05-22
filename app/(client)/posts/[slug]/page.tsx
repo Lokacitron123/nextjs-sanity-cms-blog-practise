@@ -9,6 +9,7 @@ import { PortableText } from "@portabletext/react";
 import Image from "next/image";
 import { urlForImage } from "@/sanity/lib/image";
 import { notFound } from "next/navigation";
+import { slugify } from "@/app/utils/helpers";
 
 const font = Lilita_One({ weight: "400", subsets: ["latin"] });
 const dateFont = VT323({ weight: "400", subsets: ["latin"] });
@@ -61,7 +62,9 @@ export default async function SinglePostPage({ params, searchParams }: Params) {
             </Link>
           ))}
         </div>
+        <Toc headings={post.headings} />
         <div className={richTextStyles}>
+          {/*  Portable text helps us render data from sanity */}
           <PortableText
             value={post.body}
             components={myPortableTextComponents}
@@ -86,6 +89,48 @@ const myPortableTextComponents = {
       </div>
     ),
   },
+  block: {
+    h2: ({ value }: any) => (
+      <h2
+        id={slugify(value.children[0].text)}
+        className='text-3xl font-bold mb-3'
+      >
+        {value.children[0].text}
+      </h2>
+    ),
+    h3: ({ value }: any) => (
+      <h3
+        id={slugify(value.children[0].text)}
+        className='text-2xl font-bold mb-3'
+      >
+        {value.children[0].text}
+      </h3>
+    ),
+    h4: ({ value }: any) => (
+      <h4
+        id={slugify(value.children[0].text)}
+        className='text-2xl font-bold mb-3'
+      >
+        {value.children[0].text}
+      </h4>
+    ),
+    h5: ({ value }: any) => (
+      <h5
+        id={slugify(value.children[0].text)}
+        className='text-2xl font-bold mb-3'
+      >
+        {value.children[0].text}
+      </h5>
+    ),
+    h6: ({ value }: any) => (
+      <h6
+        id={slugify(value.children[0].text)}
+        className='text-xl font-bold mb-3'
+      >
+        {value.children[0].text}
+      </h6>
+    ),
+  },
 };
 
 const richTextStyles = `
@@ -101,3 +146,26 @@ const richTextStyles = `
     prose-li:leading-7
     prose-li:ml-4
 `;
+
+// Table Content for linking inside an "post" article
+const Toc = ({ headings }: any) => (
+  <div className='max-w-2xl mx-auto mt-8 text-center border rounded-sm dark:border-purple-950 '>
+    <h2 className='text-xl font-bold p-2 mb-5 border-b dark:border-purple-950 bg-amber-50 dark:bg-slate-950/20'>
+      Table of Contents
+    </h2>
+    <nav className='flex justify-center '>
+      <ul className='text-start'>
+        {headings?.map((heading: any) => (
+          <li key={heading?._key} className='py-1'>
+            <a
+              href={`#${slugify(heading.children[0].text)}`}
+              className='mb-2 hover:underline hover:underline-offset-2'
+            >
+              {heading.children[0].text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+);

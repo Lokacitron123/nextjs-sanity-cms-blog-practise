@@ -5,6 +5,7 @@ type Post = {
   };
   publishedAt: string;
   excerpt: string;
+  headings?: string[] | HTMLHeadElement;
   body: any;
   tags: Array<Tag>;
   _id: string;
