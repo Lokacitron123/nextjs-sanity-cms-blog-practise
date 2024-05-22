@@ -1,4 +1,4 @@
-interface Post {
+type Post = {
   title: string;
   slug: {
     current: string;
@@ -8,12 +8,13 @@ interface Post {
   body: any;
   tags: Array<Tag>;
   _id: string;
-}
+};
 
-interface Tag {
+type Tag = {
   name: string;
   slug: {
     current: string;
   };
   _id: string;
-}
+  postCount?: number;
+};
